@@ -1,15 +1,17 @@
-(package ucl-ffi (0 1)
-  (synopsis "Interaction with C libraries")
-  (description "Just your ordinary, run-of-the-mill \
-                foreign function interface")
-  (category "UCL")
+(package ucl-ffi)
+(version 0 1)
+(category "UCL")
 
-  (author "Will Donnelly")
-  (email "wgd@willdonnelly.net")
+(synopsis "Interaction with C libraries")
+(description "Just your ordinary, run-of-the-mill \
+              foreign function interface")
 
-  (license BSD3)
-  (license-file "LICENSE")
+(author "Will Donnelly")
+(email "wgd@willdonnelly.net")
 
-  (code "ucl/ffi.sls" "ucl/ffi/*.sls")
+(license BSD3)
+(license-file "LICENSE")
 
-  (schemes ikarus mosh ypsilon plt larceny))
+(code "ucl/ffi.sls" "ucl/ffi/*.sls")
+
+(schemes ikarus mosh ypsilon plt larceny)
