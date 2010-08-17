@@ -5,10 +5,11 @@
           malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?
           string-clone string-read sizeof)
-  (import (rnrs) (ucl ffi types) (ucl ffi memory) (ucl ffi functions))
-
-  ;; list the integers in the half-open range [x, y)
-  (define (range x y) (do ((i (- y 1) (- i 1)) (a '() (cons i a))) ((< i x) a)))
+  (import (rnrs)
+    (ucl prelude)
+    (ucl ffi types)
+    (ucl ffi memory)
+    (ucl ffi functions))
 
   (define (string-clone str)
     (let* ((vec (string->bytevector str (native-transcoder)))
@@ -30,9 +31,6 @@
            (vec (u8-list->bytevector chs)))
       (bytevector->string vec (native-transcoder))))
 
-
-  ;; CLEANUP - Do cleanup after evaluating an expression
-  (define-syntax cleanup (syntax-rules () ((_ c e) (let ((r e)) c r))))
 
   ;; FUNCTION-CONVERT - Do some type conversion around the given function
   ;;                    essentially just makes strings into pointers and
