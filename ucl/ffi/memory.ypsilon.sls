@@ -33,7 +33,7 @@
   (define (null-ptr? ptr)
     (zero? (pointer->integer ptr)))
 
-  (define (pointer-set! pointer offset type value)
+  (define (pointer-set! type offset pointer value)
     (let* ((ptr (+ (pointer->integer pointer) offset))
            (win (make-bytevector-mapping ptr (sizeof type))))
       (case type
@@ -46,7 +46,7 @@
         ((pointer)       (bytevector-c-long-set!   win 0 (ptr-get value)))
         (else            (error 'pointer-set! "unsupported type" type)))))
 
-  (define (pointer-get pointer offset type)
+  (define (pointer-get type offset pointer)
     (let* ((ptr (+ (pointer->integer pointer) offset))
            (win (make-bytevector-mapping ptr (sizeof type))))
       (case type

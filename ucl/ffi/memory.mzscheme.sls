@@ -10,8 +10,8 @@
   (define my-cast
     (let ((mem (malloc 16)))
       (lambda (val from to)
-        (pointer-set! mem 0 from val)
-        (pointer-get mem 0 to))))
+        (pointer-set! from 0 mem val)
+        (pointer-get to 0 mem))))
 
   (define (pointer->integer ptr)
     (my-cast ptr 'pointer 'ulong))
@@ -27,8 +27,8 @@
   (define (null-ptr? ptr)
     (not ptr))
 
-  (define (pointer-set! pointer offset type value)
+  (define (pointer-set! type offset pointer value)
     (ptr-set! pointer (symbol->type type) 'abs offset value))
-  (define (pointer-get pointer offset type)
+  (define (pointer-get type offset pointer)
     (ptr-ref pointer (symbol->type type) 'abs offset))
 )

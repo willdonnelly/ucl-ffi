@@ -82,12 +82,12 @@ Memory
   NULL-PTR? ptr
     Is the pointer PTR null?
 
-  POINTER-SET! pointer offset type value
+  POINTER-SET! type offset pointer value
     Writes a value of the given type at a certain offset into
     a memory region. The offset is always given in bytes,
     regardless of the type of value being written.
 
-  POINTER-GET pointer offset type
+  POINTER-GET  type offset pointer
     Reads back a value from a memory region. More-or-less
     guaranteed to read back in data the same as it was
     written out, but you can't always rely on a newly

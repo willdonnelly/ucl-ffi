@@ -23,10 +23,10 @@
 (define surface (sdl-set-video-mode 640 480 32 0))
 
 (define rect (ffi:malloc 8))
-(ffi:pointer-set! rect 0 'sshort 10)
-(ffi:pointer-set! rect 2 'sshort 10)
-(ffi:pointer-set! rect 4 'ushort 100)
-(ffi:pointer-set! rect 6 'ushort 100)
+(ffi:pointer-set! 'sshort 0 rect 10)
+(ffi:pointer-set! 'sshort 2 rect 10)
+(ffi:pointer-set! 'ushort 4 rect 100)
+(ffi:pointer-set! 'ushort 6 rect 100)
 
 (sdl-fillrect surface rect #xFF00FF00)
 (ffi:free rect)
@@ -37,8 +37,8 @@
 (define mem (ffi:malloc 16))
 
 (define (roundtrip cmp type value)
-  (ffi:pointer-set! mem 0 type value)
-  (let ((val (ffi:pointer-get mem 0 type)))
+  (ffi:pointer-set! type 0 mem value)
+  (let ((val (ffi:pointer-get type 0 mem)))
     (if (not (cmp val value))
         (error 'roundtrip "value didn't survive" (list type value val))
         "Success!")))
@@ -89,9 +89,9 @@
 ;(newline)
 
 (define ptr (ffi:malloc 8))
-(ffi:pointer-set! ptr 0 'double 1.23)
+(ffi:pointer-set! 'double 0 ptr 1.23)
 (set! ptr (ffi:integer->pointer (ffi:pointer->integer ptr)))
-(display (ffi:pointer-get ptr 0 'double))
+(display (ffi:pointer-get 'double 0 ptr))
 (newline)
 
 (write (ffi:pointer? (ffi:malloc 1)))
@@ -120,9 +120,9 @@
 ;(newline)
 
 (define str-ptr (ffi:string-clone "X"))
-(display (ffi:pointer-get str-ptr 0 'uchar))
+(display (ffi:pointer-get 'uchar 0 str-ptr))
 (newline)
-(display (ffi:pointer-get str-ptr 1 'uchar))
+(display (ffi:pointer-get 'uchar 1 str-ptr))
 (newline)
 
 ;(define print-string (ffi:get-function libTest "PrintString" '(string) 'void))

@@ -34,7 +34,7 @@
   (define (null-ptr? ptr)
     (not ptr))
 
-  (define (pointer-set! pointer offset type value)
+  (define (pointer-set! type offset pointer value)
     (let* ((unwrap (record-accessor void*-rt 'ptr))
            (ptr (+ offset (unwrap pointer))))
       (case type
@@ -51,7 +51,7 @@
         ((pointer) (%poke-pointer     ptr (unwrap value)))
         (else      (error 'pointer-set! "unsupported type" type)))))
 
-  (define (pointer-get pointer offset type)
+  (define (pointer-get type offset pointer)
     (let* ((unwrap (record-accessor void*-rt 'ptr))
            (rewrap (record-constructor void*-rt))
            (ptr (+ offset (unwrap pointer))))

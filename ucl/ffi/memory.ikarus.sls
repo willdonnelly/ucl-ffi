@@ -11,7 +11,7 @@
   (define (null-ptr? ptr)
     (zero? (pointer->integer ptr)))
 
-  (define (pointer-set! pointer offset type value)
+  (define (pointer-set! type offset pointer value)
     (case type
       ((float)         (pointer-set-c-float!   pointer offset value))
       ((double)        (pointer-set-c-double!  pointer offset value))
@@ -22,7 +22,7 @@
       ((pointer)       (pointer-set-c-pointer! pointer offset value))
       (else            (error 'pointer-set! "unsupported type" type))))
 
-  (define (pointer-get pointer offset type)
+  (define (pointer-get type offset pointer)
     (case type
       ((float)   (pointer-ref-c-float          pointer offset))
       ((double)  (pointer-ref-c-double         pointer offset))
