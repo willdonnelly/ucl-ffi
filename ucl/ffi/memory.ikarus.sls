@@ -1,12 +1,15 @@
 #!r6rs
 
 (library (ucl ffi memory)
-  (export malloc free null pointer-set! pointer-get
+  (export malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?)
   (import (rnrs) (ikarus foreign))
   ;; MALLOC and FREE come directly from Ikarus
 
   (define null (integer->pointer 0))
+
+  (define (null-ptr? ptr)
+    (zero? (pointer->integer ptr)))
 
   (define (pointer-set! pointer offset type value)
     (case type

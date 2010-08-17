@@ -13,7 +13,7 @@
 ;;   they'll be disjoint from integers.
 
 (library (ucl ffi memory)
-  (export malloc free null pointer-set! pointer-get
+  (export malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?)
   (import (rnrs) (ypsilon ffi) (ucl ffi functions) (ucl ffi types)
           (ucl ffi pointer))
@@ -24,11 +24,14 @@
 
   (define (malloc s) (ptr-new (libc-malloc s)))
   (define (free p) (libc-free (ptr-get p)))
-  (define null (ptr-new 0))
 
   (define pointer->integer ptr-get)
   (define integer->pointer ptr-new)
   (define pointer? ptr?)
+
+  (define null (integer->pointer 0))
+  (define (null-ptr? ptr)
+    (zero? (pointer->integer ptr)))
 
   (define (pointer-set! pointer offset type value)
     (let* ((ptr (+ (pointer->integer pointer) offset))

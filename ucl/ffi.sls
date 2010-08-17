@@ -74,6 +74,9 @@
 ;;   NULL
 ;;     The null pointer (it's different across implementations).
 ;;
+;;   NULL-PTR?
+;;     Is a given pointer null?
+;;
 ;;   (POINTER-SET! pointer offset type value)
 ;;     Writes a value of the given type at a certain offset into
 ;;       a memory region. The offset is always given in bytes,
@@ -99,11 +102,12 @@
 ;;
 ;;   (STRING-READ ptr)
 ;;     The inverse of STRING-CLONE. Takes a memory region and reads the
-;;       contents as a Scheme string.
+;;       contents as a Scheme string. Does not free the pointer, so you'll
+;;       have to do that yourself.
 
 (library (ucl ffi)
   (export load-library get-function ptr-function make-callback
-          malloc free null pointer-set! pointer-get
+          malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?
           string-clone string-read sizeof)
   (import (rnrs) (ucl ffi types) (ucl ffi memory) (ucl ffi functions))

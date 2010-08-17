@@ -1,13 +1,16 @@
 #!r6rs
 
 (library (ucl ffi memory)
-  (export malloc free null pointer-set! pointer-get
+  (export malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?)
   (import (rnrs) (mosh ffi))
 
   ;; MALLOC and FREE come directly from Mosh
 
   (define null (integer->pointer 0))
+
+  (define (null-ptr? ptr)
+    (zero? (pointer->integer ptr)))
 
   (define set-signed-long!
     (if (= size-of-long 4) pointer-set-c-int32! pointer-set-c-int64!))

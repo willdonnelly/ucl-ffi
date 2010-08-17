@@ -1,7 +1,7 @@
 #!r6rs
 
 (library (ucl ffi memory)
-  (export malloc free null pointer-set! pointer-get
+  (export malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?)
   (import (rnrs)
           (primitives %poke8 %poke8u %peek8 %peek8u %poke16 %poke16u %peek16
@@ -30,6 +30,9 @@
       (internal-free (unwrap pointer))))
 
   (define null #f)
+
+  (define (null-ptr? ptr)
+    (not ptr))
 
   (define (pointer-set! pointer offset type value)
     (let* ((unwrap (record-accessor void*-rt 'ptr))
