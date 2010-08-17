@@ -1,0 +1,114 @@
+UCL FFI
+=======
+
+ A foreign function interface which works, hopefully identically,
+ on all Schemes supported by UCL.
+
+Types
+-----
+
+  The primitive types exposed by UCL-FFI are all numbers,
+    with the exception of the pointer type.
+  The usual menagerie of numeric types are supported, with
+    the following sizes:
+
+    * float   - 4 bytes
+    * double  - 8 bytes
+    * char    - 1 byte
+    * short   - 2 bytes
+    * int     - 4 bytes
+    * long    - 4 bytes or 8 bytes
+    * pointer - 4 bytes or 8 bytes
+    * string  - see pointer
+
+  The long/pointer size distinction occurs on 64-bit systems,
+    as expected, and all other sizes are constant.
+  Just in case, though, a SIZEOF procedure is provided which
+    will return the size, in bytes, of a data type.
+
+  The type symbols are the same as the above list of types,
+    except that the char, short, int, and long types are
+    all prefixed with a 'u' or 's' character to indicated
+    signedness.
+
+  The string type deserves special mention. It is only valid
+    for function types. When used as an argument, you should
+    pass in a Scheme string, and memory will be allocated for
+    it before entering the function, and freed after it returns.
+    When used as a return type, a memory region will be read
+    into a Scheme string, and then the original region will
+    be freed. If this is not a desirable behavior, the functions
+    STRING-CLONE and STRING-READ can be used directly, and
+    the pointer type should be used instead.
+
+Functions
+---------
+
+  LOAD-LIBRARY . names
+    Takes a list of possible library names, and attempts
+    to load them in order until one is successful. If
+    it succeeds, it returns a library reference, and
+    otherwise it returns #f.
+
+  GET-FUNCTION lib name args ret
+    Extracts a symbol NAME from library LIB, and wraps
+    it in a converter function which takes argument types
+    ARGS and returns a value of type RET. The resulting
+    value can be called directly as a Scheme function.
+
+  PTR-FUNCTION ptr args ret
+    The same as GET-FUNCTION, but it operates on a pointer
+    instead of looking up a symbol in a library.
+
+  MAKE-CALLBACK args ret fn
+    Wraps the given scheme procedure in a trampoline and
+    sets up the necessary type conversions so that it
+    can be passed to C code. Returns a pointer to the
+    newly allocated function.
+
+Memory
+------
+
+  MALLOC size
+    Allocates a memory region of SIZE bytes and returns
+    a pointer. The memory will not be zeroed.
+
+  FREE ptr
+    Exactly what it says on the tin.
+
+  NULL
+    The null pointer (it differs across implementations).
+
+  NULL-PTR? ptr
+    Is the pointer PTR null?
+
+  POINTER-SET! pointer offset type value
+    Writes a value of the given type at a certain offset into
+    a memory region. The offset is always given in bytes,
+    regardless of the type of value being written.
+
+  POINTER-GET pointer offset type
+    Reads back a value from a memory region. More-or-less
+    guaranteed to read back in data the same as it was
+    written out, but you can't always rely on a newly
+    read pointer object being EQUAL? to the old one.
+
+  POINTER->INTEGER pointer
+    Casts a pointer's value into an integer for easy manipulation.
+
+  INTEGER->POINTER integer
+    The inverse of POINTER->INTEGER, returns a pointer value
+    corresponding to a particular integer.
+
+  POINTER? pointer
+    Returns true if the value is usable as a pointer.
+
+  STRING-CLONE str
+    Allocate a new memory region and fill it with a null-terminated
+    sequence of characters representing the given string. The
+    characters are converted using the native transcoder.
+
+  STRING-READ ptr
+    Read the null-terminated character sequence starting at PTR, and
+    place the result into a Scheme string using the native transcoder.
+    Does not free PTR.
