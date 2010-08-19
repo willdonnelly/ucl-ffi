@@ -15,4 +15,4 @@
 
 (code "ucl/ffi.sls" "ucl/ffi/*.sls")
 
-(schemes ikarus mosh ypsilon plt larceny)
+(schemes ikarus larceny mosh racket ypsilon)
