@@ -4,7 +4,9 @@
   (export load-library get-function ptr-function make-callback
           malloc free null null-ptr? pointer-set! pointer-get
           pointer->integer integer->pointer pointer?
-          string-clone string-read sizeof)
+          string-clone
+          bytevector-read string-read
+          sizeof)
   (import (rnrs)
     (ucl prelude)
     (ucl ffi types)
@@ -22,15 +24,14 @@
       (pointer-set! 'uchar len mem 0)
       mem))
 
+  (define (bytevector-read ptr len)
+    (define (get-char off) (pointer-get 'uchar off ptr))
+    (u8-list->bytevector (map get-char (range 0 len))))
+
   (define (string-read ptr)
     (define (get-char off) (pointer-get 'uchar off ptr))
     (define (strlen off) (if (equal? (get-char off) 0) off (strlen (+ 1 off))))
-    (let* ((len (strlen 0))
-           (ixs (range 0 len))
-           (chs (map get-char ixs))
-           (vec (u8-list->bytevector chs)))
-      (bytevector->string vec (native-transcoder))))
-
+    (bytevector->string (bytevector-read ptr (strlen 0)) (native-transcoder)))
 
   ;; FUNCTION-CONVERT - Do some type conversion around the given function
   ;;                    essentially just makes strings into pointers and
